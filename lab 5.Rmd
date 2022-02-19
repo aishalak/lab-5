@@ -2,7 +2,9 @@
 title: "lab 5"
 author: "Aisha Lakshman"
 date: "2/18/2022"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -70,8 +72,33 @@ model <- lm(price_3_nights ~ neigh_simp + number_of_reviews + reviews_per_month,
 tidy(model, conf.int = TRUE) %>% 
   kable(format = "markdown", digits = 3)
 ```
+## Exercise 8
 According to our model, the coefficient of number_of_reviews = -0.437 and the confidence interval for 
 number_of_reviews = (-0.834,-0.040). The coefficient tells us that the price of a three night stay decreases by $0.437 for each review. The confidence interval tells us that if we repeat our sample data, 95% of the time the coefficient for number_of_reviews will fall in the range of (-0.834,-0.040). 
-## Exercise 8
-According to our model, the coefficient of neigh_simpCity of Santa Cruz = -208.001 and the confidence interval for neigh_simpCity of Santa Cruz = (-356.966,-59.036). The coefficient tells us that the price for a three night stay in the City of Santa Cruz is on average $208 less than a three night stay in the City of Capitola. The confidence interval tells us that if we repeat our sample data, 95% of the time the coefficient for neigh_simpCity will fall in the range of (-356.966,-59.036). 
+## Exercise 9
+According to our model, the coefficient of neigh_simpCity of Santa Cruz = -208.001 and the confidence interval for neigh_simpCity of Santa Cruz = (-356.966,-59.036). The coefficient tells us that the price for a three night stay in the City of Santa Cruz is on average $208 less than a three night stay in the City of Capitola. The confidence interval tells us that if we repeat our sample data, 95% of the time the coefficient for neigh_simpCity will fall in the range of (-356.966,-59.036).
+## Exercise 10
+The intercept in our model represents inferential statistics and the confidence interval for the City of Capitola. The intercept is meaningful because it acts as our "baseline", as the other inferential statistics and confidence intervals are dependent on the intercept. 
+## Exercise 11
+```{r}
+1475.380 - 671.550 - 0.437 * 10 - 85.171 * 5.14
+
+predic_data <- data.frame(neigh_simp = "Other", number_of_reviews = 10, reviews_per_month = 5.14)
+predict(model, predic_data, interval = "confidence")
+```
+Using the model, I predict a three night stay at a Scotts Valley airbnb with 10 reviews and 5.14 reviews per month would cost $361.6811. The 95% confidence interval is (59.63618, 663.7387). 
+## Exercise 12
+To check the linearity assumption, we can inspect a plot of the residuals vs predictors for our model. Based on the plot below, I would say the linearity assumption is not satisfied because there is a clear fan-shaped pattern. To check the constant variance assumption, we can also inspect the plot below. I would say the constant variance assumption is not satisfied because there the points do not create a consistent shape from left to right.
+```{r}
+#residuals vs predicted 
+plot(model$fitted.values, model$residuals, cex=0.2)
+abline(h = 0, col = "red")
+```
+To check the normality assumption for our model, we can create a histogram of the model residuals. Based on the plot below, I would say the normality assumption is not satisfied because the histogram does not follow a normal distribution.
+```{r}
+ggplot(data = model, aes(x = model$residuals)) + 
+  geom_histogram() + 
+  labs(x = "Residuals", y = "", title = "Distribution of Residuals")
+```
+Based on these assumption checks, I would not be too confident in the interpretation based on the inferential results of this model. 
 
